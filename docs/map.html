@@ -2,11 +2,11 @@
 <html>
    <head>
       <title>Bus maps</title>
-      <link rel = "stylesheet" href = "https://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
    </head>
    <body>
       <div id = "map" style = "width: 700px; height: 500px;"></div>
-      <script src = "https://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
       <script>
          async function getStations() {
            const dat = await fetch('data/stations.json');
