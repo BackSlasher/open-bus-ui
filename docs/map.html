@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Bus maps</title>
+      <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+   </head>
+   <body>
+      <div id = "map" style = "width: 700px; height: 500px;"></div>
+      <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+      <script>
+         async function getStations() {
+           const dat = await fetch('data/stations.json');
+           const j = dat.json()
+           return j;
+         }
+
+         function stationToMarker(station) {
+           // https://leafletjs.com/reference.html#marker
+           const marker = L.marker([station.lat, station.lon], {title:station.name});
+           // TODO enrich marker - onclick, hover, etc
+           const element = document.createElement("div");
+           element.innerHTML = `
+             <b>${station.name}</b><br/>
+             Accuracy: 90%<br/>
+             Phantom Stops: 3%<br/>
+             <a href="station.html?code=${station.code}">details</a>
+           `;
+           marker.bindPopup(element);
+           return marker;
+         }
+         async function getMarkers() {
+           const stations = await getStations();
+           // XXX only loading the first 1000, otherwise browser slows 
+           const stations2 = stations.slice(0,1000);
+           const markers = stations2.map(s => stationToMarker(s));
+           return markers;
+         }
+
+         async function main() {
+           // TODO change?
+           const mapOptions = {
+              center: [32.06266620997495, 34.78620305063178],
+              zoom: 10
+           }
+           const map = new L.map('map', mapOptions);
+           const layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+           map.addLayer(layer);
+           (await getMarkers()).forEach(m => m.addTo(map));
+         }
+         
+         (async () => {await main();})();
+      </script>
+   </body>
+</html>
+
